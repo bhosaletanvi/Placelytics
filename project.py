@@ -15,89 +15,129 @@ st.set_page_config(
 st.markdown("""
 <style>
 .stApp {
-    background: #10101C;
-    color: #F5F3FF;
+    background: #F7F5EF;
+    color: #294B3A;
+}
+
+[data-testid="stHeader"] {
+    background: rgba(247,245,239,0.95);
 }
 
 [data-testid="stSidebar"] {
-    background: #19182B;
-    border-right: 1px solid #34304F;
+    background: #E9EEE6;
+    border-right: 1px solid #D5DED2;
 }
 
 [data-testid="stSidebar"] * {
-    color: #EDEBFF;
+    color: #294B3A;
 }
 
 .main-title {
     font-size: 38px;
     font-weight: 800;
-    color: #FFFFFF;
-    letter-spacing: 1px;
+    color: #294B3A;
+    letter-spacing: -1px;
 }
 
 .subtitle {
-    color: #A5A0C8;
+    color: #7B897D;
     font-size: 14px;
-    margin-bottom: 25px;
+    margin-bottom: 28px;
 }
 
 .section-title {
-    color: #F4F0FF;
+    color: #294B3A;
     font-size: 21px;
     font-weight: 700;
-    margin-top: 20px;
 }
 
 .metric-card {
-    background: linear-gradient(135deg, #25223D, #1A1930);
-    border: 1px solid #454065;
-    border-radius: 15px;
-    padding: 20px;
-    min-height: 120px;
-    box-shadow: 0 5px 20px #00000030;
+    background: #FFFFFF;
+    border: 1px solid #E1E7DE;
+    border-radius: 18px;
+    padding: 22px;
+    min-height: 125px;
+    box-shadow: 0 5px 18px rgba(41,75,58,0.06);
+    transition: 0.3s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 9px 22px rgba(41,75,58,0.12);
 }
 
 .metric-label {
-    color: #AAA5C7;
-    font-size: 13px;
+    color: #829084;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
 }
 
 .metric-value {
     font-size: 29px;
     font-weight: 800;
-    color: #FFFFFF;
-    margin-top: 10px;
+    color: #294B3A;
+    margin-top: 12px;
 }
 
 .metric-note {
-    color: #54E5D2;
+    color: #72977A;
     font-size: 12px;
     margin-top: 5px;
 }
 
 .stButton>button {
-    background: linear-gradient(90deg, #8B5CF6, #EC4899);
-    color: white;
+    background: #294B3A;
+    color: #FFFFFF;
     border: none;
-    border-radius: 9px;
-    font-weight: bold;
+    border-radius: 10px;
+    padding: 8px 18px;
+    font-weight: 600;
+}
+
+.stButton>button:hover {
+    background: #426C50;
+    color: white;
 }
 
 .stDownloadButton>button {
-    background: #25223D;
-    color: #54E5D2;
-    border: 1px solid #54E5D2;
-    border-radius: 9px;
-}
-
-div[data-testid="stDataFrame"] {
-    border: 1px solid #454065;
+    background: #E3EDE3;
+    color: #294B3A;
+    border: 1px solid #B9CDBA;
     border-radius: 10px;
 }
 
-hr {
-    border-color: #34304F;
+.stDownloadButton>button:hover {
+    background: #D3E3D4;
+    color: #294B3A;
 }
+
+div[data-testid="stDataFrame"] {
+    border: 1px solid #DCE4D9;
+    border-radius: 12px;
+}
+
+h1, h2, h3 {
+    color: #294B3A !important;
+}
+
+hr {
+    border-color: #DCE4D9;
+}
+
+[data-testid="stMetric"] {
+    background: #FFFFFF;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #E1E7DE;
+}
+
+[data-baseweb="select"] > div {
+    background-color: #FFFFFF;
+    border-color: #D5DED2;
+    border-radius: 9px;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -171,40 +211,64 @@ avg = placed_df["Package"].mean() if placed else 0
 highest = placed_df["Package"].max() if placed else 0
 
 # ---------------- CHART THEME ----------------
+
 COLORS = [
-    "#9B5DE5",
-    "#00F5D4",
-    "#F15BB5",
-    "#FEE440",
-    "#00BBF9",
-    "#FB8500"
+    "#294B3A",  # Forest Green
+    "#A3BFA8",  # Sage Green
+    "#D68C70",  # Terracotta
+    "#D9B86C",  # Soft Gold
+    "#7895A3",  # Dusty Blue
+    "#B7A6C9"   # Lavender
 ]
 
+
+
 def style_chart(fig, height=350):
+
     fig.update_layout(
-        template="plotly_dark",
-        paper_bgcolor="#19182B",
-        plot_bgcolor="#19182B",
+        template="plotly_white",
+        paper_bgcolor="#FFFFFF",
+        plot_bgcolor="#FFFFFF",
+
         font=dict(
             family="Arial",
-            color="#EDEBFF"
+            color="#294B3A",
+            size=12
         ),
+
         height=height,
-        margin=dict(l=20, r=20, t=60, b=20),
-        legend=dict(
-            bgcolor="rgba(0,0,0,0)"
+
+        margin=dict(
+            l=20,
+            r=20,
+            t=60,
+            b=20
         ),
-        title_font=dict(size=17, color="#FFFFFF")
+
+        title_font=dict(
+            size=18,
+            color="#294B3A"
+        ),
+
+        legend=dict(
+            bgcolor="rgba(255,255,255,0)"
+        )
     )
+
     fig.update_xaxes(
         showgrid=False,
-        linecolor="#454065"
+        linecolor="#E1E7DE",
+        tickfont=dict(color="#718477")
     )
+
     fig.update_yaxes(
-        gridcolor="#34304F",
-        zerolinecolor="#454065"
+        gridcolor="#EDF0E9",
+        zerolinecolor="#DCE4D9",
+        tickfont=dict(color="#718477")
     )
+
     return fig
+
 
 # ---------------- HEADER ----------------
 st.markdown(
@@ -264,9 +328,9 @@ if page == "Overview":
             hole=0.68,
             color="Status",
             color_discrete_map={
-                "Placed": "#00F5D4",
-                "Not Placed": "#F15BB5"
-            }
+    "Placed": "#294B3A",
+    "Not Placed": "#D68C70"
+}
         )
 
         fig.update_traces(
@@ -277,7 +341,7 @@ if page == "Overview":
         fig.add_annotation(
             text=f"{rate:.1f}%<br>PLACED",
             showarrow=False,
-            font=dict(size=19, color="#FFFFFF")
+            font=dict(size=19, color="#294B3A")
         )
 
         st.plotly_chart(style_chart(fig), use_container_width=True)
